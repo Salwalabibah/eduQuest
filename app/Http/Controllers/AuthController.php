@@ -22,6 +22,8 @@ class AuthController extends Controller
             'password' => bcrypt($validated['password']),
         ]);
 
+        $user->assignRole('student');
+
         Auth::login($user);
 
         return response()->json(['message' => 'Registered succesfully']);

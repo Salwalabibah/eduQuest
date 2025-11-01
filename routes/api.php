@@ -1,8 +1,12 @@
 <?php
 
-use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
+use Spatie\Permission\Middlewares\RoleMiddleware;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -18,4 +22,13 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/register', 'register');
     Route::post('/login', 'login');
     Route::post('/logout', 'logout')->middleware('auth:sanctum');
+});
+
+// group route dengan middleware
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::get('/admin', function () {
+        return response()->json(['message' => 'Welcome, Admin!']);
+    });
+    
+    Route::resource('users', UserController::class);
 });
